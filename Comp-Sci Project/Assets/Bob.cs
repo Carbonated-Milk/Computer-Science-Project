@@ -5,9 +5,11 @@ using UnityEngine;
 public class Bob : MonoBehaviour
 {
     Vector3 ogPos;
+
     [Header("Bob")]
     public float bobHeight = 1f;
     public float bobSpeed = 1f;
+
     [Header("Spin")]
     public float spinSpeed = 1;
     public float spinBreak = 1;

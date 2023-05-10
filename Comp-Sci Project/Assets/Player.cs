@@ -12,6 +12,12 @@ public class Player : MonoBehaviour
     private Rigidbody rb;
     private CapsuleCollider col;
 
+    public static Player singleton;
+
+    private void Awake()
+    {
+        singleton = this;
+    }
     void Start()
     {
         inputs = new Inputs();

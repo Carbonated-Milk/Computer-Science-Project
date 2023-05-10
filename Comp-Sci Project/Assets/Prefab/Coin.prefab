@@ -176,6 +176,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5581884106006359080}
   - component: {fileID: 4637158993509681851}
+  - component: {fileID: 7693916879275592496}
+  - component: {fileID: 8127451095221226822}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Untagged
@@ -219,6 +221,31 @@ MonoBehaviour:
   spinBreak: 1
   spinTime: 1
   random: 1
+--- !u!114 &7693916879275592496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5061208881994675858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 563b54228ff7208499cf71e6a6867006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!135 &8127451095221226822
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5061208881994675858}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8666408792165844419
 GameObject:
   m_ObjectHideFlags: 0
