@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -18,17 +19,17 @@ public class LevelManager : MonoBehaviour
     {
         //Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        StartCoroutine(CountDown());
+        countDown = StartCoroutine(CountDown());
     }
 
-    // Update is called once per frame
     void Update()
     {
         UpdateUI();
-
     }
 
     private float remainingTime;
+
+    private Coroutine countDown;
 
     public IEnumerator CountDown()
     {
@@ -36,12 +37,20 @@ public class LevelManager : MonoBehaviour
         while (remainingTime > 0)
         {
             remainingTime -= Time.deltaTime;
-
+            timeText.text = remainingTime + "s";
             yield return null;
         }
-        timeText.text = "Time's Up";
+        GameOver();
         PlayerHealth.singleton.Die();
         Debug.Log("lose");
+    }
+
+    public void GameOver()
+    {
+        StopCoroutine(countDown);
+        timeText.text = remainingTime > 0 ? "Game Over" : "Time's Up";
+        died.SetActive(true);
+        Cursor.visible = true;
     }
 
     [Header("UI Stuff")]
@@ -49,7 +58,14 @@ public class LevelManager : MonoBehaviour
     public TMP_Text coinText;
     public void UpdateUI()
     {
-        timeText.text = remainingTime + "s";
         coinText.text = Coin.collectedCoins + "/" + Coin.coinCount + " coins collected";
+    }
+
+    [Header("UI Windows")]
+    public GameObject died;
+    public void Reset()
+    {
+        died.SetActive(false);
+        Scene scene = SceneManager.GetActiveScene(); SceneManager.LoadScene(scene.name);
     }
 }

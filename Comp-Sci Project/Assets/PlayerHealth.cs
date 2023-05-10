@@ -18,4 +18,13 @@ public class PlayerHealth : MonoBehaviour
         GetComponent<Player>().enabled = false;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("InstantDeath"))
+        {
+            Die();
+            LevelManager.singleton.GameOver();
+        }
+    }
+
 }

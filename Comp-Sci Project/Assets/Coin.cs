@@ -14,6 +14,7 @@ public class Coin : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
+            AudioManager.singleton.Play("Coin");
             collectedCoins++;
             Destroy(gameObject);
         }
