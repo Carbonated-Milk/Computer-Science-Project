@@ -10,11 +10,13 @@ public class Player : MonoBehaviour
     public Transform camObj;
 
     private Rigidbody rb;
+    private CapsuleCollider col;
 
     void Start()
     {
         inputs = new Inputs();
         rb = GetComponent<Rigidbody>();
+        col = GetComponent<CapsuleCollider>();
     }
 
     void Update()
@@ -27,7 +29,7 @@ public class Player : MonoBehaviour
 
         HandleJumping();
 
-        MovePlayer();
+        Walking();
     }
 
     [Header("Camera")]
@@ -39,39 +41,50 @@ public class Player : MonoBehaviour
         transform.rotation = Quaternion.Euler(inputs.mousePos.y * sensitivity * Vector3.up);
     }
 
-    [Header("Movement")]
+    [Header("Walking")]
 
     public float maxSpeed = 5;
-    public float _acceleration = 3;
-    public void MovePlayer()
+    public float timeToMaxSpeed = 1f;
+    private float _acceleration = 0;
+    public float deceleration = 30;
+    public void Walking()
     {
-        float acceleration = _acceleration;
+        if (!grounded) return;
 
         Vector3 targetRB = transform.rotation * (inputs.wasd.x * Vector3.right + inputs.wasd.y * Vector3.forward);
 
         if (inputs.wasd == Vector2.zero || Vector3.Dot(targetRB, rb.velocity - rb.velocity.y * Vector3.up) < 0)
         {
-            acceleration *= 2;
+            _acceleration = 0;
+            rb.velocity = Vector3.MoveTowards(rb.velocity, targetRB + rb.velocity.y * Vector3.up, deceleration * Time.deltaTime);
+            return;
         }
 
-        
-        targetRB = targetRB.normalized * maxSpeed + rb.velocity.y * Vector3.up;
+        _acceleration += maxSpeed / timeToMaxSpeed * Time.deltaTime;
+        _acceleration = Mathf.Clamp(_acceleration, rb.velocity.magnitude, maxSpeed);
 
-        rb.velocity = Vector3.MoveTowards(rb.velocity, targetRB, acceleration * Time.deltaTime);
+        targetRB = targetRB.normalized * _acceleration + rb.velocity.y * Vector3.up;
+
+        rb.velocity = targetRB;
     }
 
     [Header("Ground Handling")]
+    public float height = 1;
+    public float radius = 1;
+    public LayerMask mask;
+
     private bool grounded = true;
+
     public void HandleGrounding()
     {
-
+        grounded = Physics.CheckSphere(transform.position - Vector3.up * (col.height / 2 + height), radius, mask);
     }
 
-
+    [Header("Jumping")]
     public float jumpPower = 5;
     public void HandleJumping()
     {
-        if(grounded && inputs.spaceDown)
+        if (grounded && inputs.spaceDown)
         {
             Jump();
         }
@@ -89,7 +102,25 @@ public class Player : MonoBehaviour
 
         inputs.mousePos = Vector2.right * Input.mousePosition.y + Vector2.up * Input.mousePosition.x;
         inputs.wasd = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+        inputs.run = Input.GetKey(KeyCode.LeftShift);
     }
+
+    private void OnDrawGizmos()
+    {
+        if (col == null) col = GetComponent<CapsuleCollider>();
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position - Vector3.up * (col.height / 2 + height), radius);
+    }
+
+    #region Bonus Functions
+
+    public bool GetGrounded()
+    {
+        return grounded;
+    }
+
+    #endregion
 }
 
 public struct Inputs
@@ -98,4 +129,5 @@ public struct Inputs
     public Vector2 wasd;
     public bool space;
     public bool spaceDown;
+    public bool run;
 }
