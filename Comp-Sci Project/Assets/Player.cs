@@ -22,15 +22,18 @@ public class Player : MonoBehaviour
         col = GetComponent<CapsuleCollider>();
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        MoveCamera();
-
         HandleGrounding();
 
         HandleJumping();
 
         Walking();
+    }
+
+    void Update()
+    {
+        MoveCamera();
     }
 
     [Header("Camera")]
@@ -49,27 +52,27 @@ public class Player : MonoBehaviour
     [Header("Walking")]
 
     public float maxSpeed = 5;
-    public float timeToMaxSpeed = 1f;
     public float deceleration = 30;
+    public float speedCorrector = 5; //should be removeable later
     public void Walking()
     {
         float controltiplier = 1;
-        if (!grounded) controltiplier/= 4;
+        if (!grounded) controltiplier /= 4;
 
         float _maxSpeed = InputP.inputs.run ? maxSpeed * 2 : maxSpeed;
 
         Vector3 targetRB = transform.rotation * (InputP.inputs.wasd.x * Vector3.right + InputP.inputs.wasd.y * Vector3.forward).normalized;
         targetRB *= _maxSpeed;
 
-        if (InputP.inputs.wasd == Vector2.zero || Vector3.Dot(targetRB, rb.velocity - rb.velocity.y * Vector3.up) < 0)
+        /*if (InputP.inputs.wasd == Vector2.zero || Vector3.Dot(targetRB, rb.velocity - rb.velocity.y * Vector3.up) < 0)
         {
-            rb.velocity = Vector3.MoveTowards(rb.velocity, targetRB + rb.velocity.y * Vector3.up, deceleration * Time.deltaTime);
+            rb.velocity = Vector3.MoveTowards(rb.velocity, targetRB + rb.velocity.y * Vector3.up, deceleration * Time.fixedDeltaTime);
             return;
-        }
+        }*/
 
         Vector3 relVel = targetRB - (rb.velocity - rb.velocity.y * Vector3.up);
 
-        rb.AddForce(relVel * controltiplier);
+        rb.AddForce(relVel * controltiplier * speedCorrector, ForceMode.Acceleration);
     }
 
     [Header("Ground Handling")]
