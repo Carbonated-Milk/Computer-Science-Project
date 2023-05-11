@@ -25,4 +25,9 @@ public class Coin : MonoBehaviour
         coinCount = 0;
         collectedCoins = 0;
     }
+
+    public static bool CollectedAll()
+    {
+        return coinCount == collectedCoins;
+    }
 }

@@ -46,11 +46,25 @@ public class LevelManager : MonoBehaviour
         Debug.Log("lose");
     }
 
+    private bool gameWon = false;
+    public void Win()
+    {
+        gameWon = true;
+        gameUI.SetActive(false);
+        win.SetActive(true);
+        GameOver();
+    }
+
     public void GameOver()
     {
+        Player.singleton.enabled = false;
         StopCoroutine(countDown);
+        if (gameWon) return;
         timeText.text = remainingTime > 0 ? "Game Over" : "Time's Up";
-        died.SetActive(true);
+
+        gameUI.SetActive(false);
+        death.SetActive(true);
+
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
     }
@@ -64,10 +78,14 @@ public class LevelManager : MonoBehaviour
     }
 
     [Header("UI Windows")]
-    public GameObject died;
+    public GameObject gameUI;
+    public GameObject win;
+    public GameObject death;
     public void Reset()
     {
-        died.SetActive(false);
+        gameUI.SetActive(true);
+        death.SetActive(false);
+
         Scene scene = SceneManager.GetActiveScene(); SceneManager.LoadScene(scene.name);
     }
 }

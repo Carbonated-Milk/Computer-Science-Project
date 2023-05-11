@@ -15,7 +15,7 @@ public class PlayerHealth : MonoBehaviour
     }
     public void Die()
     {
-        GetComponent<Player>().enabled = false;
+        
     }
 
     private void OnCollisionEnter(Collision collision)

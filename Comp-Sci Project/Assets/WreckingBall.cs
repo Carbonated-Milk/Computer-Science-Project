@@ -11,16 +11,17 @@ public class WreckingBall : MonoBehaviour
     void Start()
     {
         var lastObj = gameObject;
-        for (int i = 1; i < joints + 1; i++)
+        for (int i = 1; i < joints; i++)
         {
             var obj = Instantiate(joint);
-            obj.transform.position = Vector3.Lerp(transform.position, endPoint.position, i/(joints + 1));
+            obj.transform.position = Vector3.Lerp(transform.position, endPoint.position, i/joints);
             obj.transform.localScale = Vector3.one;
             lastObj.GetComponent<ConfigurableJoint>().connectedBody = obj.GetComponent<Rigidbody>();
             lastObj = obj;
         }
-        Destroy(lastObj.GetComponent<ConfigurableJoint>());
-        lastObj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        lastObj.GetComponent<ConfigurableJoint>().connectedBody = endPoint.GetComponent<Rigidbody>();
+
+        Destroy(joint);
     }
 
     // Update is called once per frame

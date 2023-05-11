@@ -81,20 +81,23 @@ public class Player : MonoBehaviour
     public LayerMask mask;
 
     private bool grounded = true;
+    private float lastTimeGrounded;
 
     public void HandleGrounding()
     {
         grounded = Physics.CheckSphere(transform.position - Vector3.up * (col.height / 2 + height), radius, mask);
+        if (grounded) lastTimeGrounded = Time.time;
     }
 
     [Header("Jumping")]
     public float jumpPower = 5;
     public float groundAccelerator = 1f;
+    public float cayoteTime;
     public void HandleJumping()
     {
-        if (grounded && InputP.inputs.spaceDown)
+        if (InputP.inputs.spaceDown)
         {
-            Jump();
+            if(grounded || Time.time - lastTimeGrounded < cayoteTime) Jump();
         }
         else if(InputP.inputs.space)
         {
