@@ -14,10 +14,11 @@ public class LevelManager : MonoBehaviour
     private void Awake()
     {
         singleton = this;
+        Coin.ResetCoins();
     }
     void Start()
     {
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         countDown = StartCoroutine(CountDown());
     }
@@ -51,6 +52,7 @@ public class LevelManager : MonoBehaviour
         timeText.text = remainingTime > 0 ? "Game Over" : "Time's Up";
         died.SetActive(true);
         Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     [Header("UI Stuff")]

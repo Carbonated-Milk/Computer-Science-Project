@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    Inputs inputs;
-
     [Header("Objects")]
     public Transform camObj;
 
@@ -20,15 +18,12 @@ public class Player : MonoBehaviour
     }
     void Start()
     {
-        inputs = new Inputs();
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
     }
 
     void Update()
     {
-        GatherInputs();
-
         MoveCamera();
 
         HandleGrounding();
@@ -40,38 +35,41 @@ public class Player : MonoBehaviour
 
     [Header("Camera")]
     public float sensitivity = 1f;
+
+    private Vector2 mousePos;
     public void MoveCamera()
     {
-        float camClamp = Mathf.Clamp(inputs.mousePos.x * sensitivity, -85, 80);
-        camObj.localRotation = Quaternion.Euler(-camClamp * Vector3.right);
-        transform.rotation = Quaternion.Euler(inputs.mousePos.y * sensitivity * Vector3.up);
+        mousePos += InputP.inputs.mouseDelta * sensitivity;
+        float camClamp = Mathf.Clamp(mousePos.y, -85, 80);
+        mousePos = new Vector2(mousePos.x, camClamp);
+        camObj.localRotation = Quaternion.Euler(-mousePos.y * Vector3.right);
+        transform.rotation = Quaternion.Euler(mousePos.x * sensitivity * Vector3.up);
     }
 
     [Header("Walking")]
 
     public float maxSpeed = 5;
     public float timeToMaxSpeed = 1f;
-    private float _acceleration = 0;
     public float deceleration = 30;
     public void Walking()
     {
-        if (!grounded) return;
+        float controltiplier = 1;
+        if (!grounded) controltiplier/= 4;
 
-        Vector3 targetRB = transform.rotation * (inputs.wasd.x * Vector3.right + inputs.wasd.y * Vector3.forward);
+        float _maxSpeed = InputP.inputs.run ? maxSpeed * 2 : maxSpeed;
 
-        if (inputs.wasd == Vector2.zero || Vector3.Dot(targetRB, rb.velocity - rb.velocity.y * Vector3.up) < 0)
+        Vector3 targetRB = transform.rotation * (InputP.inputs.wasd.x * Vector3.right + InputP.inputs.wasd.y * Vector3.forward).normalized;
+        targetRB *= _maxSpeed;
+
+        if (InputP.inputs.wasd == Vector2.zero || Vector3.Dot(targetRB, rb.velocity - rb.velocity.y * Vector3.up) < 0)
         {
-            _acceleration = 0;
             rb.velocity = Vector3.MoveTowards(rb.velocity, targetRB + rb.velocity.y * Vector3.up, deceleration * Time.deltaTime);
             return;
         }
 
-        _acceleration += maxSpeed / timeToMaxSpeed * Time.deltaTime;
-        _acceleration = Mathf.Clamp(_acceleration, rb.velocity.magnitude, maxSpeed);
+        Vector3 relVel = targetRB - (rb.velocity - rb.velocity.y * Vector3.up);
 
-        targetRB = targetRB.normalized * _acceleration + rb.velocity.y * Vector3.up;
-
-        rb.velocity = targetRB;
+        rb.AddForce(relVel * controltiplier);
     }
 
     [Header("Ground Handling")]
@@ -88,28 +86,22 @@ public class Player : MonoBehaviour
 
     [Header("Jumping")]
     public float jumpPower = 5;
+    public float groundAccelerator = 1f;
     public void HandleJumping()
     {
-        if (grounded && inputs.spaceDown)
+        if (grounded && InputP.inputs.spaceDown)
         {
             Jump();
+        }
+        else if(InputP.inputs.space)
+        {
+            rb.AddForce(Vector2.down * groundAccelerator);
         }
 
         void Jump()
         {
             rb.velocity += Vector3.up * jumpPower;
         }
-    }
-
-    public void GatherInputs()
-    {
-        inputs.space = Input.GetKey(KeyCode.Space);
-        inputs.spaceDown = Input.GetKeyDown(KeyCode.Space);
-
-        inputs.mousePos = Vector2.right * Input.mousePosition.y + Vector2.up * Input.mousePosition.x;
-        inputs.wasd = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-
-        inputs.run = Input.GetKey(KeyCode.LeftShift);
     }
 
     private void OnDrawGizmos()
@@ -129,11 +121,4 @@ public class Player : MonoBehaviour
     #endregion
 }
 
-public struct Inputs
-{
-    public Vector2 mousePos;
-    public Vector2 wasd;
-    public bool space;
-    public bool spaceDown;
-    public bool run;
-}
+
