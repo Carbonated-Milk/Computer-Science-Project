@@ -48,6 +48,7 @@ public class LevelManager : MonoBehaviour
     }
 
     private bool gameWon = false;
+    private bool gameLost = false;
     public void Win()
     {
         gameWon = true;
@@ -58,10 +59,13 @@ public class LevelManager : MonoBehaviour
 
     public void GameOver()
     {
+        if (gameLost) return;
+        gameLost = true;
         AudioManager.singleton.Stop("Speedy");
         Player.singleton.enabled = false;
         StopCoroutine(countDown);
         if (gameWon) return;
+        AudioManager.singleton.Play("PianoSlam");
         timeText.text = remainingTime > 0 ? "Game Over" : "Time's Up";
 
         gameUI.SetActive(false);
