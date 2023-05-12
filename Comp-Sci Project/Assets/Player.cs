@@ -66,12 +66,6 @@ public class Player : MonoBehaviour
         Vector3 targetRB = transform.rotation * (InputP.inputs.wasd.x * Vector3.right + InputP.inputs.wasd.y * Vector3.forward).normalized;
         targetRB *= _maxSpeed;
 
-        /*if (InputP.inputs.wasd == Vector2.zero || Vector3.Dot(targetRB, rb.velocity - rb.velocity.y * Vector3.up) < 0)
-        {
-            rb.velocity = Vector3.MoveTowards(rb.velocity, targetRB + rb.velocity.y * Vector3.up, deceleration * Time.fixedDeltaTime);
-            return;
-        }*/
-
         Vector3 relVel = targetRB - (rb.velocity - rb.velocity.y * Vector3.up);
 
         rb.AddForce(relVel * controltiplier * speedCorrector, ForceMode.Acceleration);
@@ -89,6 +83,20 @@ public class Player : MonoBehaviour
     {
         grounded = Physics.CheckSphere(transform.position - Vector3.up * (col.height / 2 + height), radius, mask);
         if (grounded) lastTimeGrounded = Time.time;
+
+        /*Collider[] groundParent = Physics.OverlapSphere(transform.position - Vector3.up * (col.height / 2 + height), radius, mask);
+
+        if (groundParent.Length != 0)
+        {
+            grounded = true;
+            lastTimeGrounded = Time.time;
+            transform.parent = groundParent[0].transform;
+        }
+        else
+        {
+            grounded = false;
+            transform.parent = null;
+        }*/
     }
 
     [Header("Jumping")]

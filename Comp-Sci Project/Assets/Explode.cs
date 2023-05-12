@@ -9,7 +9,6 @@ public class Explode : MonoBehaviour
     public float explodePower;
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(gameObject);
         BlowUp();
     }
 
@@ -19,20 +18,21 @@ public class Explode : MonoBehaviour
         foreach (Collider item in stuff)
         {
             Rigidbody rb = item.attachedRigidbody;
+            if (item.gameObject == gameObject) continue;
             if (rb != null)
             {
-                var relDist = rb.transform.position - transform.position;
-                rb.AddExplosionForce(explodePower / relDist.magnitude, transform.position, 300);
+                Vector3 relDist = rb.transform.position - transform.position;
+                rb.AddForce(relDist.normalized * explodePower * Functions.SmoothStep(1 - relDist.magnitude/explodeRadius), ForceMode.Impulse);
             }
         }
-        var part = Instantiate(particals);
-        part.transform.position = transform.position;
-        Destroy(part, 5f);
+        ParticleSystem particalInstance = Instantiate(particals).GetComponent<ParticleSystem>();
+        particalInstance.transform.position = transform.position;
+
         Destroy(gameObject);
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawSphere(transform.position, explodeRadius);
+        Gizmos.DrawWireSphere(transform.position, explodeRadius);
     }
 }
