@@ -24,16 +24,18 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        HandleGrounding();
-
-        HandleJumping();
-
-        Walking();
+        
     }
 
     void Update()
     {
         MoveCamera();
+
+        HandleGrounding();
+
+        HandleJumping();
+
+        Walking();
     }
 
     [Header("Camera")]
