@@ -18,6 +18,7 @@ public class LevelManager : MonoBehaviour
     }
     void Start()
     {
+        AudioManager.singleton.Play("Speedy");
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         countDown = StartCoroutine(CountDown());
@@ -57,6 +58,7 @@ public class LevelManager : MonoBehaviour
 
     public void GameOver()
     {
+        AudioManager.singleton.Stop("Speedy");
         Player.singleton.enabled = false;
         StopCoroutine(countDown);
         if (gameWon) return;

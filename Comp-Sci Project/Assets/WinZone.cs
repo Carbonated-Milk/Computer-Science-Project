@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class WinZone : MonoBehaviour
 {
@@ -10,14 +11,21 @@ public class WinZone : MonoBehaviour
     {
         if (!Coin.CollectedAll())
         {
-            //needMoreCoins. NEED DOTWEEEN
+            needMoreCoins.text = "Only Collected " + Coin.collectedCoins + "/" + Coin.coinCount + " coins";
+            needMoreCoins.DOKill();
+            needMoreCoins.DOFade(1, 1f);
+            return;
         }
         LevelManager.singleton.Win();
+        Destroy(GetComponent<Collider>());
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (!Coin.CollectedAll())
-            LevelManager.singleton.Win();
+        {
+            needMoreCoins.DOKill();
+            needMoreCoins.DOFade(0, 1f);
+        }
     }
 }

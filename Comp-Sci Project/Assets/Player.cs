@@ -93,11 +93,13 @@ public class Player : MonoBehaviour
     public float jumpPower = 5;
     public float groundAccelerator = 1f;
     public float cayoteTime;
+
+    private float lastTimeJumped;
     public void HandleJumping()
     {
         if (InputP.inputs.spaceDown)
         {
-            if(grounded || Time.time - lastTimeGrounded < cayoteTime) Jump();
+            if(grounded || Time.time - lastTimeGrounded < cayoteTime && Time.time - lastTimeJumped > cayoteTime) Jump();
         }
         else if(InputP.inputs.space)
         {
@@ -107,6 +109,7 @@ public class Player : MonoBehaviour
         void Jump()
         {
             rb.velocity += Vector3.up * jumpPower;
+            lastTimeJumped = Time.time;
         }
     }
 
