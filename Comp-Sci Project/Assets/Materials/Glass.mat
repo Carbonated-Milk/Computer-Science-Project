@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Building
+  m_Name: Glass
   m_Shader: {fileID: -6465566751694194690, guid: 86f516b80308d9e468d285b3696ff465,
     type: 3}
   m_ValidKeywords: []
@@ -39,7 +39,7 @@ Material:
     - _QueueOffset: 0
     m_Colors: []
   m_BuildTextureStacks: []
---- !u!114 &3326416532725733259
+--- !u!114 &9133563751570107919
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
