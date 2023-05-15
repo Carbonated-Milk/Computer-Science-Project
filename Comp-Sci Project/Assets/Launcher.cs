@@ -10,6 +10,8 @@ public class Launcher : MonoBehaviour
     public float interval = 1f;
     public float life = 5f;
     public float speed = 20f;
+    public bool randRotate;
+    public Vector3 rotation;
 
     public bool random = false;
     public float mult = 1;
@@ -29,7 +31,14 @@ public class Launcher : MonoBehaviour
                 obj.transform.position += new Vector3(Random.Range(-1f, 1) * transform.localScale.x, 0, Random.Range(-1f, 1) * transform.localScale.y) * mult;
             }
             obj.GetComponent<Rigidbody>().velocity = transform.up * speed;
-            obj.transform.rotation = Quaternion.Euler(new Vector3(Random.Range(0,360f), Random.Range(0, 360f), Random.Range(0, 360f)));
+            if (randRotate)
+            {
+                obj.transform.rotation = Quaternion.Euler(new Vector3(Random.Range(0, 360f), Random.Range(0, 360f), Random.Range(0, 360f)));
+            }
+            else
+            {
+                obj.transform.rotation = Quaternion.Euler(rotation);
+            }
             Destroy(obj, life);
             yield return new WaitForSeconds(interval);
         }

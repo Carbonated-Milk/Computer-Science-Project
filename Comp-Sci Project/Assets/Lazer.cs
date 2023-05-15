@@ -6,6 +6,8 @@ public class Lazer : MonoBehaviour
 {
     private Transform player;
     private Transform lazer;
+    public Transform particles;
+    public Transform beam;
 
     [Header("Lazer Settings")]
     public float lazerSpeed = 5f;
@@ -20,7 +22,18 @@ public class Lazer : MonoBehaviour
     void Update()
     {
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(player.position - transform.position, transform.up), lazerSpeed * Time.deltaTime);
-        
-        RaycastHit[] lazerCollision = Physics.RaycastAll(transform.position, transform.forward);
+
+        RaycastHit hit = new RaycastHit();
+        Physics.Raycast(transform.position, transform.forward, out hit);
+
+        if (hit.collider != null)
+        {
+            particles.position = hit.point;
+            beam.localScale = new Vector3(1, 1, hit.distance);
+            if (hit.collider.transform.CompareTag("Player"))
+            {
+                PlayerHealth.singleton.Die();
+            }
+        }
     }
 }

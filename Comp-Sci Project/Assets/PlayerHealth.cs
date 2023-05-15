@@ -15,7 +15,8 @@ public class PlayerHealth : MonoBehaviour
     }
     public void Die()
     {
-        
+        Debug.Log("death");
+        LevelManager.singleton.GameOver();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -23,7 +24,6 @@ public class PlayerHealth : MonoBehaviour
         if (collision.collider.CompareTag("InstantDeath"))
         {
             Die();
-            LevelManager.singleton.GameOver();
         }
     }
 
