@@ -14,12 +14,19 @@ public class Swivel : MonoBehaviour
     }
 
     private float ogY;
+    private Quaternion ogRot;
     public IEnumerator Rotate()
     {
         if (waitTime == 0) waitTime = 1;
+
         ogY = transform.rotation.eulerAngles.y;
-        transform.Rotate(new Vector3(0, -degreesOfFreedom, 0));
         int i = 1;
+
+       /* while (true)
+        {
+            Quaternion targetRot = ogRot * Quaternion.Euler(Vector3.up*)
+        }*/
+
         while(true)
         {
             float targetY = transform.rotation.eulerAngles.y + i * degreesOfFreedom;

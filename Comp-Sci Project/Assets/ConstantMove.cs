@@ -4,16 +4,9 @@ using UnityEngine;
 
 public class ConstantMove : MonoBehaviour
 {
-    // Start is called before the first frame update
-    private Rigidbody rb;
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
-
-    // Update is called once per frame
+    public float speed;
     void Update()
     {
-        transform.position += rb.velocity * Time.deltaTime;
+        transform.position -= speed * transform.right * Time.deltaTime;
     }
 }
