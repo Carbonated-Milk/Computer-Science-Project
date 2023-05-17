@@ -55,16 +55,20 @@ public class LevelManager : MonoBehaviour
         gameUI.SetActive(false);
         win.SetActive(true);
         GameOver();
+        AudioManager.singleton.Play("Win");
     }
 
     public void GameOver()
     {
         if (gameLost) return;
         gameLost = true;
-        AudioManager.singleton.Stop("Speedy");
+        AudioManager.singleton.StopAllSongs();
         Player.singleton.enabled = false;
         StopCoroutine(countDown);
-        if (gameWon) return;
+        if (gameWon)
+        {
+            return;
+        }
         AudioManager.singleton.Play("PianoSlam");
         timeText.text = remainingTime > 0 ? "Game Over" : "Time's Up";
 
