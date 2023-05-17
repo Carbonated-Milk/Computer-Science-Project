@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
     }
 
     [Header("Camera")]
-    public float sensitivity = 1f;
+    public static float sensitivity = 1f;
 
     private Vector2 mousePos;
     public void MoveCamera()

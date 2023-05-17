@@ -19,8 +19,7 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         AudioManager.singleton.Play("Speedy");
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        SetMouseFree(false);
         countDown = StartCoroutine(CountDown());
     }
 
@@ -75,8 +74,7 @@ public class LevelManager : MonoBehaviour
         gameUI.SetActive(false);
         death.SetActive(true);
 
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.Confined;
+        SetMouseFree(true);
     }
 
     [Header("UI Stuff")]
@@ -93,9 +91,25 @@ public class LevelManager : MonoBehaviour
     public GameObject death;
     public void Reset()
     {
+        AudioManager.singleton.StopAllSongs();
+
         gameUI.SetActive(true);
         death.SetActive(false);
 
         Scene scene = SceneManager.GetActiveScene(); SceneManager.LoadScene(scene.name);
+    }
+
+    public static void SetMouseFree(bool isFree)
+    {
+        if(isFree)
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 }

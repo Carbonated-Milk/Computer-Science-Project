@@ -36,6 +36,11 @@ public class GameManager : MonoBehaviour
         return OpenScene(netLevelIndex);
     }
 
+    public void ReturnToLevelMenu()
+    {
+        Debug.Log("make later");
+    }
+
     private void UnlockLevel(int level)
     {
         levelsUnlocked = Mathf.Max(levelsUnlocked, level);

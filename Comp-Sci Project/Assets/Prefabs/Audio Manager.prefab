@@ -68,6 +68,13 @@ MonoBehaviour:
       pitch: 1
       loop: 0
       source: {fileID: 0}
+    - name: Explosion
+      clip: {fileID: 8300000, guid: f9cdd4c2142f95f468523863f9c998a9, type: 3}
+      volume: 1
+      adjustedVolume: 0
+      pitch: 1
+      loop: 0
+      source: {fileID: 0}
   - name: Songs
     sounds:
     - name: Speedy
