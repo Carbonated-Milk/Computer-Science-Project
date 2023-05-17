@@ -9,7 +9,13 @@ public static class GameManager
 
     public static bool OpenScene(int level)
     {
-        if (level > levelsUnlocked || level > SceneManager.sceneCountInBuildSettings) return false;
+        if (level > levelsUnlocked) return false;
+
+        if (level >= SceneManager.sceneCountInBuildSettings)
+        {
+            ReturnToLevelMenu();
+            return false;
+        }
 
         AudioManager.singleton.StopAllSongs();
         SceneManager.LoadScene(level);
