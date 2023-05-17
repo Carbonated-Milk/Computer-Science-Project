@@ -11,13 +11,24 @@ public class LevelManager : MonoBehaviour
 
     public static LevelManager singleton;
 
+    public static GameState gameState;
+    public enum GameState
+    {
+        Playing,
+        Paused,
+        Win,
+        Lose
+    }
+
     private void Awake()
     {
         singleton = this;
         Coin.ResetCoins();
+        gameState = GameState.Playing;
     }
     void Start()
     {
+        Time.timeScale = 1;
         AudioManager.singleton.Play("Speedy");
         SetMouseFree(false);
         countDown = StartCoroutine(CountDown());
@@ -43,38 +54,37 @@ public class LevelManager : MonoBehaviour
         }
         GameOver();
         PlayerHealth.singleton.Die();
-        Debug.Log("lose");
     }
-
-    private bool gameWon = false;
-    private bool gameLost = false;
     public void Win()
     {
-        gameWon = true;
+        if (gameState != GameState.Playing) return;
+        gameState = GameState.Win;
         gameUI.SetActive(false);
         win.SetActive(true);
-        GameOver();
+        StopGamePlay();
+
         AudioManager.singleton.Play("Win");
     }
 
     public void GameOver()
     {
-        if (gameLost) return;
-        gameLost = true;
-        AudioManager.singleton.StopAllSongs();
-        Player.singleton.enabled = false;
-        StopCoroutine(countDown);
-        if (gameWon)
-        {
-            return;
-        }
+        if (gameState != GameState.Playing) return;
+        gameState = GameState.Lose;
+
+        StopGamePlay();
         AudioManager.singleton.Play("PianoSlam");
         timeText.text = remainingTime > 0 ? "Game Over" : "Time's Up";
 
         gameUI.SetActive(false);
         death.SetActive(true);
+    }
 
+    private void StopGamePlay()
+    {
         SetMouseFree(true);
+        AudioManager.singleton.StopAllSongs();
+        Player.singleton.enabled = false;
+        StopCoroutine(countDown);
     }
 
     [Header("UI Stuff")]
@@ -111,5 +121,15 @@ public class LevelManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
+    }
+
+    public void NextLevel()
+    {
+        GameManager.NextLevel();
+    }
+
+    public void MainMenu()
+    {
+        GameManager.ReturnToLevelMenu();
     }
 }

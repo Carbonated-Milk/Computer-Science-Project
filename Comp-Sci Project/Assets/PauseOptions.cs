@@ -17,7 +17,7 @@ public class PauseOptions : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Tab))
+        if(Input.GetKeyDown(KeyCode.Tab) && LevelManager.gameState == LevelManager.GameState.Playing)
         {
             if (!isOpen) OpenPauseMenu();
             else ReturnToGame();
@@ -50,6 +50,6 @@ public class PauseOptions : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        GameManager.singleton.ReturnToLevelMenu();
+        GameManager.ReturnToLevelMenu();
     }
 }

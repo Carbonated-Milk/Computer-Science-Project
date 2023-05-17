@@ -3,24 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public static class GameManager
 {
-    public static GameManager singleton;
-    private int levelsUnlocked = 100000;
+    private static int levelsUnlocked = 100000;
 
-    private void Awake()
-    {
-        if(singleton == null)
-        {
-            singleton = this;
-            DontDestroyOnLoad(this);
-        }
-        else
-        {
-            Destroy(this);
-        }
-    }
-    public bool OpenScene(int level)
+    public static bool OpenScene(int level)
     {
         if (level > levelsUnlocked || level > SceneManager.sceneCountInBuildSettings) return false;
 
@@ -29,19 +16,19 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
-    public bool NextLevel()
+    public static bool NextLevel()
     {
         int netLevelIndex = SceneManager.GetActiveScene().buildIndex + 1;
         UnlockLevel(netLevelIndex);
         return OpenScene(netLevelIndex);
     }
 
-    public void ReturnToLevelMenu()
+    public static void ReturnToLevelMenu()
     {
-        Debug.Log("make later");
+        OpenScene(0);
     }
 
-    private void UnlockLevel(int level)
+    private static void UnlockLevel(int level)
     {
         levelsUnlocked = Mathf.Max(levelsUnlocked, level);
     }
