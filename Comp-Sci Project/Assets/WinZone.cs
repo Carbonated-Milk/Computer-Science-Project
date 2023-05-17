@@ -9,6 +9,8 @@ public class WinZone : MonoBehaviour
     public TMP_Text needMoreCoins;
     private void OnTriggerEnter(Collider other)
     {
+        if (!other.CompareTag("Player")) return;
+
         if (!Coin.CollectedAll())
         {
             needMoreCoins.text = "Only Collected " + Coin.collectedCoins + "/" + Coin.coinCount + " coins";
