@@ -81,10 +81,10 @@ public class Player : MonoBehaviour
 
     public void HandleGrounding()
     {
-        grounded = Physics.CheckSphere(transform.position - Vector3.up * (col.height / 2 + height), radius, mask);
-        if (grounded) lastTimeGrounded = Time.time;
+        /*grounded = Physics.CheckSphere(transform.position - Vector3.up * (col.height / 2 + height), radius, mask);
+        if (grounded) lastTimeGrounded = Time.time;*/
 
-        /*Collider[] groundParent = Physics.OverlapSphere(transform.position - Vector3.up * (col.height / 2 + height), radius, mask);
+        Collider[] groundParent = Physics.OverlapSphere(transform.position - Vector3.up * (col.height / 2 + height), radius, mask);
 
         if (groundParent.Length != 0)
         {
@@ -96,7 +96,7 @@ public class Player : MonoBehaviour
         {
             grounded = false;
             transform.parent = null;
-        }*/
+        }
     }
 
     [Header("Jumping")]

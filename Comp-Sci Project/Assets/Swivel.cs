@@ -5,6 +5,7 @@ using UnityEngine;
 public class Swivel : MonoBehaviour
 {
     public float degreesOfFreedom;
+    public Vector2 angles;
     public float waitTime = 1f;
     public float speed;
     void Start()
@@ -39,5 +40,10 @@ public class Swivel : MonoBehaviour
             i *= -1;
             yield return new WaitForSeconds(waitTime);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        //Gizmos. draw angle thing
     }
 }
