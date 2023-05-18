@@ -24,6 +24,9 @@ public class InputP : MonoBehaviour
         inputs.wasd = controls.Player.Movement.ReadValue<Vector2>();
 
         inputs.run = controls.Player.Run.WasPressedThisFrame();
+
+        inputs.control = controls.Player.Crouch.WasPerformedThisFrame();
+        inputs.controlThisFrame = controls.Player.Crouch.WasPressedThisFrame();
     }
 
     private void OnEnable()
@@ -46,4 +49,6 @@ public struct Inputs
     public bool space;
     public bool spaceDown;
     public bool run;
+    public bool control;
+    public bool controlThisFrame;
 }

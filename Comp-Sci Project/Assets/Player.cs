@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -60,6 +61,10 @@ public class Player : MonoBehaviour
     public float speedCorrector = 5; //should be removeable later
     public void Walking()
     {
+        if (isSliding) { return; };
+
+
+
         float controltiplier = 1;
         if (!grounded) controltiplier /= 4;
 
@@ -132,6 +137,30 @@ public class Player : MonoBehaviour
         if (col == null) col = GetComponent<CapsuleCollider>();
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position - transform.up * (col.height / 2 + height), radius);
+    }
+
+    [Header("Sliding")]
+    private boolean isSliding;
+    public Vector3 slideSpeed
+    public float slideDecell;
+    private Boolean isCrouching;
+
+    public void Sliding()
+    {
+        if (InputP.inputs.controlThisFrame && grounded && rb.velocity.sqrMagnitude > 0)
+        {
+            isSliding = true;
+            isCrouching = true;
+            col.height *= .3;
+            slideSpeed = rb.velocity;
+            slideSpeed += slideDecell;
+        }
+        else if (InputP.inputs.controlThisFrame)
+        {
+            isCrouching = true;
+            col.height *= .5;
+        }
+
     }
 
     #region Bonus Functions
