@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
 
     public static Player singleton;
 
+    private FakeChild fakeChild;
     private void Awake()
     {
         singleton = this;
@@ -20,11 +21,8 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
-    }
 
-    private void FixedUpdate()
-    {
-        
+        fakeChild = GetComponent<FakeChild>();
     }
 
     void Update()
@@ -41,14 +39,18 @@ public class Player : MonoBehaviour
     [Header("Camera")]
     public static float sensitivity = 1f;
 
-    private Vector2 mousePos;
     public void MoveCamera()
     {
-        mousePos += InputP.inputs.mouseDelta * sensitivity;
-        float camClamp = Mathf.Clamp(mousePos.y, -85, 80);
-        mousePos = new Vector2(mousePos.x, camClamp);
-        camObj.localRotation = Quaternion.Euler(-mousePos.y * Vector3.right);
-        transform.rotation = Quaternion.Euler(mousePos.x * sensitivity * Vector3.up);
+        Vector2 mDelta = InputP.inputs.mouseDelta * sensitivity;
+        camObj.localRotation *= Quaternion.Euler(-mDelta.y * Vector3.right);
+        float xClamp = camObj.localRotation.eulerAngles.x;
+
+        Vector2 bounds = new Vector2(85, 280);
+        if (xClamp > bounds.x && xClamp < 180) xClamp = bounds.x; //tedious garbage I have to do
+        else if (xClamp < bounds.y && xClamp > 180) xClamp = bounds.y;
+
+        camObj.localRotation = Quaternion.Euler(xClamp * Vector3.right);
+        transform.localRotation *= Quaternion.Euler(mDelta.x * Vector3.up);
     }
 
     [Header("Walking")]
@@ -58,6 +60,8 @@ public class Player : MonoBehaviour
     public float speedCorrector = 5; //should be removeable later
     public void Walking()
     {
+        rb.angularVelocity = Vector3.zero;
+
         float controltiplier = 1;
         if (!grounded) controltiplier /= 4;
 
@@ -81,21 +85,23 @@ public class Player : MonoBehaviour
 
     public void HandleGrounding()
     {
-        /*grounded = Physics.CheckSphere(transform.position - Vector3.up * (col.height / 2 + height), radius, mask);
-        if (grounded) lastTimeGrounded = Time.time;*/
-
         Collider[] groundParent = Physics.OverlapSphere(transform.position - Vector3.up * (col.height / 2 + height), radius, mask);
+
 
         if (groundParent.Length != 0)
         {
             grounded = true;
             lastTimeGrounded = Time.time;
-            transform.parent = groundParent[0].transform;
+            if(fakeChild.enabled == false)
+            {
+                fakeChild.enabled = true;
+                fakeChild.SetFakeParent(groundParent[0].transform);
+            }
         }
         else
         {
             grounded = false;
-            transform.parent = null;
+            fakeChild.enabled = false;
         }
     }
 

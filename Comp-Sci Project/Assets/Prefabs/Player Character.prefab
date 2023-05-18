@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 838032015202459572}
   - component: {fileID: 838032015202459570}
   - component: {fileID: 133104675264972508}
+  - component: {fileID: 5255294054897176927}
   m_Layer: 6
   m_Name: Player Character
   m_TagString: Player
@@ -135,16 +136,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camObj: {fileID: 838032015544902530}
-  sensitivity: 0.5
   maxSpeed: 25
-  timeToMaxSpeed: 1
   deceleration: 50
+  speedCorrector: 5
   height: -0.32
   radius: 0.42
   mask:
     serializedVersion: 2
     m_Bits: 55
   jumpPower: 10
+  groundAccelerator: 1
+  cayoteTime: 0
 --- !u!136 &838032015202459572
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -173,7 +175,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &133104675264972508
 MonoBehaviour:
@@ -188,6 +190,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 20
+--- !u!114 &5255294054897176927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838032015202459569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4d38487b35c64043a666944169236b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &838032015544902543
 GameObject:
   m_ObjectHideFlags: 0

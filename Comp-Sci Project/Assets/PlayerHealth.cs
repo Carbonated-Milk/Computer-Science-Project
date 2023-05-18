@@ -15,7 +15,6 @@ public class PlayerHealth : MonoBehaviour
     }
     public void Die()
     {
-        Debug.Log("death");
         LevelManager.singleton.GameOver();
     }
 

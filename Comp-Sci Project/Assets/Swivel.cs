@@ -1,42 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class Swivel : MonoBehaviour
 {
-    public float degreesOfFreedom;
     public Vector2 angles;
     public float waitTime = 1f;
-    public float speed;
+    public float timeToRot = 2f;
     void Start()
     {
+        transform.GetChild(0).SetParent(transform, true);
         StartCoroutine(Rotate());
-        transform.parent.GetChild(3).parent = transform;
     }
-
-    private float ogY;
-    private Quaternion ogRot;
     public IEnumerator Rotate()
     {
-        if (waitTime == 0) waitTime = 1;
+        if (timeToRot == 0) timeToRot = 1;
 
-        ogY = transform.rotation.eulerAngles.y;
         int i = 1;
 
-       /* while (true)
-        {
-            Quaternion targetRot = ogRot * Quaternion.Euler(Vector3.up*)
-        }*/
+        transform.rotation = Quaternion.Euler(Vector3.up * angles.x);
+        float totalAngles = angles.y - angles.x;
 
-        while(true)
+        while (true)
         {
-            float targetY = transform.rotation.eulerAngles.y + i * degreesOfFreedom;
             float time = Time.time;
-            while (Time.time - time < waitTime)
+            while (Time.time - time < timeToRot)
             {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(Vector3.up * targetY), speed * Time.deltaTime);
+                transform.rotation *= Quaternion.Euler(totalAngles * i / timeToRot * Vector3.up * Time.deltaTime);
                 yield return null;
             }
+
             i *= -1;
             yield return new WaitForSeconds(waitTime);
         }
@@ -44,6 +38,7 @@ public class Swivel : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        //Gizmos. draw angle thing
+        //maybe later
+        //Handles.CircleHandleCap(1, transform.position + 2 * Vector3.up, Quaternion.identity, 3, EventType.DragUpdated);
     }
 }
