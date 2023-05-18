@@ -19,16 +19,30 @@ public class FakeChild : MonoBehaviour
         var rotChange = fakeParent.rotation * Quaternion.Inverse(lastRot);
 
         //change object rotation
-        transform.Rotate(rotChange.eulerAngles.y * Vector3.up);
+        if (fakeParent.CompareTag("GravityChanger"))
+        {
+            transform.rotation = rotChange * transform.rotation;
+        }
+        else
+        {
+            transform.Rotate(rotChange.eulerAngles.y * Vector3.up);
+        }
 
-        // gets the vector of the distance from parent to object and rotate it by change in parent rotation
-        transform.position = rotChange * (transform.position - lastPos) + lastPos;
-
-        //moves how much the fake parent moves
-        transform.position += fakeParent.position - lastPos;
+        // gets the vector of the distance from parent to object and rotate it by change in parent rotation, then adds new parent position
+        transform.position = rotChange * (transform.position - lastPos) + fakeParent.position;
 
         lastRot = fakeParent.rotation;
         lastPos = fakeParent.position;
+
+        //changes gravity
+        if (fakeParent.CompareTag("GravityChanger"))
+        {
+            RaycastHit hit;
+            Physics.Raycast(transform.position, -transform.up, out hit);
+            var rotAmount = Quaternion.FromToRotation(transform.up, hit.normal);
+            transform.rotation = rotAmount * transform.rotation;
+            Physics.gravity = -transform.up * Physics.gravity.magnitude;
+        }
     }
 
     public void SetFakeParent(Transform parent)

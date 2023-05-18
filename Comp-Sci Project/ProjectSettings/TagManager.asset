@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - InstantDeath
+  - GravityChanger
   layers:
   - Default
   - TransparentFX

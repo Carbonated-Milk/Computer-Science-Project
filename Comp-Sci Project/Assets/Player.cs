@@ -60,17 +60,15 @@ public class Player : MonoBehaviour
     public float speedCorrector = 5; //should be removeable later
     public void Walking()
     {
-        rb.angularVelocity = Vector3.zero;
-
         float controltiplier = 1;
         if (!grounded) controltiplier /= 4;
 
         float _maxSpeed = InputP.inputs.run ? maxSpeed * 2 : maxSpeed;
 
-        Vector3 targetRB = transform.rotation * (InputP.inputs.wasd.x * Vector3.right + InputP.inputs.wasd.y * Vector3.forward).normalized;
+        Vector3 targetRB = (InputP.inputs.wasd.x * transform.right + InputP.inputs.wasd.y * transform.forward).normalized;
         targetRB *= _maxSpeed;
 
-        Vector3 relVel = targetRB - (rb.velocity - rb.velocity.y * Vector3.up);
+        Vector3 relVel = targetRB - (rb.velocity - Vector3.Dot(rb.velocity, transform.up) * transform.up);
 
         rb.AddForce(relVel * controltiplier * speedCorrector, ForceMode.Acceleration);
     }
@@ -85,7 +83,7 @@ public class Player : MonoBehaviour
 
     public void HandleGrounding()
     {
-        Collider[] groundParent = Physics.OverlapSphere(transform.position - Vector3.up * (col.height / 2 + height), radius, mask);
+        Collider[] groundParent = Physics.OverlapSphere(transform.position - transform.up * (col.height / 2 + height), radius, mask);
 
 
         if (groundParent.Length != 0)
@@ -119,12 +117,12 @@ public class Player : MonoBehaviour
         }
         else if(InputP.inputs.space)
         {
-            rb.AddForce(Vector2.down * groundAccelerator);
+            rb.AddForce(-transform.up * groundAccelerator);
         }
 
         void Jump()
         {
-            rb.velocity += Vector3.up * jumpPower;
+            rb.velocity += transform.up * jumpPower;
             lastTimeJumped = Time.time;
         }
     }
@@ -133,7 +131,7 @@ public class Player : MonoBehaviour
     {
         if (col == null) col = GetComponent<CapsuleCollider>();
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position - Vector3.up * (col.height / 2 + height), radius);
+        Gizmos.DrawWireSphere(transform.position - transform.up * (col.height / 2 + height), radius);
     }
 
     #region Bonus Functions

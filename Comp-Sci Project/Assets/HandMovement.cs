@@ -17,8 +17,8 @@ public class HandMovement : MonoBehaviour
     private float cycle;
     void Update()
     {
-        rightArm.rotation = Quaternion.Euler(new Vector3(20 * Mathf.Sin(cycle), rightArm.rotation.eulerAngles.y, 0));
-        leftArm.rotation = Quaternion.Euler(new Vector3(20 * -Mathf.Sin(cycle), leftArm.rotation.eulerAngles.y, 0));
+        rightArm.localRotation = Quaternion.Euler(new Vector3(20 * Mathf.Sin(cycle), rightArm.localRotation.eulerAngles.y, 0));
+        leftArm.localRotation = Quaternion.Euler(new Vector3(20 * -Mathf.Sin(cycle), leftArm.localRotation.eulerAngles.y, 0));
         cycle += Time.deltaTime * Mathf.Min(rb.velocity.sqrMagnitude / 10, cycleSpeedMax);
     }
 }

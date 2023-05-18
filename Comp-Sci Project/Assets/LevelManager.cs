@@ -28,6 +28,7 @@ public class LevelManager : MonoBehaviour
     }
     void Start()
     {
+        Physics.gravity = Vector3.down * Physics.gravity.magnitude;
         Time.timeScale = 1;
         AudioManager.singleton.Play("Speedy");
         SetMouseFree(false);
