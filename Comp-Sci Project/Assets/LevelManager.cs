@@ -25,6 +25,7 @@ public class LevelManager : MonoBehaviour
         singleton = this;
         Coin.ResetCoins();
         gameState = GameState.Playing;
+        GameManager.UnlockLevel(SceneManager.GetActiveScene().buildIndex);
     }
     void Start()
     {

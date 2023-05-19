@@ -9,24 +9,50 @@ public class LevelSelector : MonoBehaviour
 {
 
     public GameObject buttonDefualt;
+    public GameObject buttonLocked;
 
+
+    private ArrayList buttonList;
     private void Awake()
     {
+        buttonList = new ArrayList();
+        GenerateButtons();
+    }
+
+    public void GenerateButtons()
+    {
+        if (buttonList.Count > 0) {
+            foreach (GameObject g in buttonList)
+            {
+                Destroy(g);
+            }
+            buttonList.Clear();
+        }
+
+        SetActiveButtons(true);
+
         int buttonCount = SceneManager.sceneCountInBuildSettings - 1;
         for (int i = 0; i < buttonCount; i++)
         {
-            GameObject button = Instantiate(buttonDefualt);
+            bool isUnlocked = i < SaveData.current.levelsUnlocked;
+
+            GameObject button = isUnlocked ? Instantiate(buttonDefualt) : Instantiate(buttonLocked);
+
             button.transform.parent = transform;
 
-            int levelNum = i + 1;
-            button.GetComponent<Button>().onClick.AddListener(() => LevelSelected(levelNum));
-            TMP_Text text = button.GetComponentInChildren<TMP_Text>();
-            text.text = (levelNum).ToString();
             RectTransform t = button.GetComponent<RectTransform>();
             t.position = buttonDefualt.GetComponent<RectTransform>().position + Vector3.right * (i - (buttonCount - 1) / 2f) * 50;
+
+            if (isUnlocked)
+            {
+                int levelNum = i + 1;
+                button.GetComponent<Button>().onClick.AddListener(() => LevelSelected(levelNum));
+                TMP_Text text = button.GetComponentInChildren<TMP_Text>();
+                text.text = (levelNum).ToString();
+            }
         }
 
-        Destroy(buttonDefualt);
+        SetActiveButtons(false);
     }
 
     private void Start()
@@ -36,5 +62,25 @@ public class LevelSelector : MonoBehaviour
     public void LevelSelected(int level)
     {
         GameManager.OpenScene(level);
+    }
+
+    public void SetActiveButtons(bool active)
+    {
+        buttonDefualt.SetActive(active);
+        buttonLocked.SetActive(active);
+    }
+
+    public void UnlockAllLevels()
+    {
+        SaveData.current.levelsUnlocked = 90000;
+        SaveManager.OnSave();
+        GenerateButtons();
+    }
+
+    public void LockLevels()
+    {
+        SaveData.current.levelsUnlocked = 1;
+        SaveManager.OnSave();
+        GenerateButtons();
     }
 }

@@ -21,6 +21,7 @@ public class Play : MonoBehaviour
             return;
         }
 
+        GameManager.OpenSave();
         play.DOScale(1.3f, 1).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
     }
     public void MaskOut()
@@ -31,7 +32,6 @@ public class Play : MonoBehaviour
 
     private IEnumerator MoveMask()
     {
-        GameManager.loaded = true;
         float time = Time.time;
         while (Time.time - time < 2)
         {
