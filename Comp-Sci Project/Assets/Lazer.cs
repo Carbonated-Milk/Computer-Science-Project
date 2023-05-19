@@ -6,16 +6,21 @@ public class Lazer : MonoBehaviour
 {
     private Transform player;
     private Transform lazer;
+
+    [Header("Game Objects")]
     public Transform particles;
     public Transform beam;
 
     [Header("Lazer Settings")]
     public float lazerSpeed = 5f;
-    private float lazerDamage = 5f;
+    public float lazerDamagePerSecond = 5f;
     void Start()
     {
         lazer = transform.GetChild(0);
         player = Player.singleton.transform;
+
+        beam.localScale = new Vector3(1, 1, 1000);
+        particles.position = transform.forward * 1000;
     }
 
     // Update is called once per frame
@@ -32,7 +37,7 @@ public class Lazer : MonoBehaviour
             beam.localScale = new Vector3(1, 1, hit.distance);
             if (hit.collider.transform.CompareTag("Player"))
             {
-                PlayerHealth.singleton.Die();
+                PlayerHealth.singleton.Hurt(lazerDamagePerSecond * Time.deltaTime);
             }
         }
     }

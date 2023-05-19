@@ -12,6 +12,11 @@ public class PlayerHealth : MonoBehaviour
     private void Awake()
     {
         singleton = this;
+        currentHealth = maxHealth;
+    }
+    private void Start()
+    {
+        UpdateHealthBar();
     }
     public void Die()
     {
@@ -24,6 +29,23 @@ public class PlayerHealth : MonoBehaviour
         {
             Die();
         }
+    }
+
+    public void Hurt(float amount)
+    {
+        currentHealth -= amount;
+        if (currentHealth <= 0)
+        {
+            Die();
+            return;
+        }
+        UpdateHealthBar();
+        
+    }
+
+    public void UpdateHealthBar()
+    {
+        HealthBar.singleton.SetHealthBar(currentHealth/maxHealth);
     }
 
 }
