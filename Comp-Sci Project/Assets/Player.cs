@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
 
     private Rigidbody rb;
     private CapsuleCollider col;
+    private float playerHeight;
 
     public static Player singleton;
 
@@ -24,6 +25,7 @@ public class Player : MonoBehaviour
         col = GetComponent<CapsuleCollider>();
 
         fakeChild = GetComponent<FakeChild>();
+        playerHeight = col.height;
     }
 
     void Update()
@@ -35,6 +37,8 @@ public class Player : MonoBehaviour
         HandleJumping();
 
         Walking();
+
+        Sliding();
     }
 
     [Header("Camera")]
@@ -140,25 +144,32 @@ public class Player : MonoBehaviour
     }
 
     [Header("Sliding")]
-    private boolean isSliding;
-    public Vector3 slideSpeed
-    public float slideDecell;
-    private Boolean isCrouching;
+    private bool isSliding;
+    public Vector3 slideSpeed;
+    public float slideDecell = .98f;
+    private bool isCrouching;
 
     public void Sliding()
     {
-        if (InputP.inputs.controlThisFrame && grounded && rb.velocity.sqrMagnitude > 0)
+        isCrouching = false;
+        isSliding = false;
+        if (InputP.inputs.control && grounded && rb.velocity.sqrMagnitude > 0)
         {
             isSliding = true;
-            isCrouching = true;
-            col.height *= .3;
-            slideSpeed = rb.velocity;
-            slideSpeed += slideDecell;
+            col.height = playerHeight * .3f;
+            slideSpeed = rb.velocity * slideDecell;
+            Debug.Log("Slide");
         }
-        else if (InputP.inputs.controlThisFrame)
+        else if (InputP.inputs.control)
         {
             isCrouching = true;
-            col.height *= .5;
+            col.height = playerHeight * .5f;
+            Debug.Log("Crouch");
+        }
+        else if (!isCrouching) 
+        { 
+            col.height = playerHeight;
+            Debug.Log("stand");
         }
 
     }
