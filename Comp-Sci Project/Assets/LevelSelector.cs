@@ -35,7 +35,6 @@ public class LevelSelector : MonoBehaviour
     }
     public void LevelSelected(int level)
     {
-        Debug.Log("opening " + level);
         GameManager.OpenScene(level);
     }
 }

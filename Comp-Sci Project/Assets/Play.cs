@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 public class Play : MonoBehaviour
 {
     public static Play singleton;
 
+    public RectTransform play;
     public RectTransform bar;
     public RectMask2D mask;
     private void Awake()
@@ -16,7 +18,10 @@ public class Play : MonoBehaviour
         if(GameManager.loaded)
         {
             QuickDisable();
+            return;
         }
+
+        play.DOScale(1.3f, 1).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
     }
     public void MaskOut()
     {
