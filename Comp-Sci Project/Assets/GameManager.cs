@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public static class GameManager
 {
     private static int levelsUnlocked = 100000;
+    public static bool loaded = false;
 
     public static bool OpenScene(int level)
     {
@@ -31,6 +32,7 @@ public static class GameManager
 
     public static void ReturnToLevelMenu()
     {
+        loaded = true;
         OpenScene(0);
     }
 
