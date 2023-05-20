@@ -4,13 +4,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class LevelSelector : MonoBehaviour
 {
-
+    [Header("Button Presets")]
     public GameObject buttonDefualt;
     public GameObject buttonLocked;
 
+    [Header("Level Text")]
+    public TMP_Text levelDescription;
 
     private ArrayList buttonList;
     private void Start()
@@ -18,6 +22,7 @@ public class LevelSelector : MonoBehaviour
         AudioManager.singleton.Play("Menu");
         buttonList = new ArrayList();
         GenerateButtons();
+        GameManager.OpenSave();
     }
 
     public void GenerateButtons()
@@ -47,7 +52,19 @@ public class LevelSelector : MonoBehaviour
             if (isUnlocked)
             {
                 int levelNum = i + 1;
-                button.GetComponent<Button>().onClick.AddListener(() => LevelSelected(levelNum));
+                var trigger = button.GetComponent<EventTrigger>();
+                var pointerOn = new EventTrigger.Entry();
+                pointerOn.eventID = EventTriggerType.PointerEnter;
+                pointerOn.callback.AddListener((data) => HoverOn(levelNum));
+                trigger.triggers.Add(pointerOn);
+
+                var pointerOff = new EventTrigger.Entry();
+                pointerOff.eventID = EventTriggerType.PointerExit;
+                pointerOff.callback.AddListener((data) => HoverOff(levelNum));
+                trigger.triggers.Add(pointerOff);
+
+                var buttonComponent = button.GetComponent<Button>();
+                buttonComponent.onClick.AddListener(() => LevelSelected(levelNum));
                 TMP_Text text = button.GetComponentInChildren<TMP_Text>();
                 text.text = (levelNum).ToString();
             }
@@ -78,5 +95,34 @@ public class LevelSelector : MonoBehaviour
         SaveData.current.levelsUnlocked = 1;
         SaveManager.OnSave();
         GenerateButtons();
+    }
+
+    public void ResetSave()
+    {
+        GameManager.ResetSave();
+        GenerateButtons();
+    }
+
+    public void HoverOn(int level)
+    {
+        levelDescription.DOKill();
+        string description = "Level " + level;
+        float record = SaveData.current.records[level - 1];
+        if (record != float.MaxValue)
+        {
+            description += "\n" + "Best Time: " + record;
+        }
+        levelDescription.text = description;
+        levelDescription.alpha = 1;
+    }
+
+    public void HoverOff(int level)
+    {
+        levelDescription.DOFade(0, .5f);
+    }
+
+    public void Back()
+    {
+        Play.singleton.MaskBack();
     }
 }

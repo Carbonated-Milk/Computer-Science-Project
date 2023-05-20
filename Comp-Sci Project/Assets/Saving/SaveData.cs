@@ -31,6 +31,12 @@ public class SaveData
         }
     }
 
+    public void ResetSave()
+    {
+        _current = null;
+        SaveManager.OnSave();
+    }
+
     ///<summary>
     ///with 1 being the first level
     ///</summary>

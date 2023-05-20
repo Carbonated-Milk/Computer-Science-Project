@@ -32,7 +32,6 @@ public class ScreenTransition : MonoBehaviour
 
     public void TransitionIN(float transitionTime = 1f)
     {
-        Debug.Log("IN " + SceneManager.GetActiveScene().buildIndex);
         Transition(true, transitionTime);
     }
 
@@ -73,8 +72,14 @@ public class ScreenTransition : MonoBehaviour
             yield return null;
         }
 
+        //one last time because it would leave off a little
+        Vector4 paddingSize2 = isIn ? new Vector4(1, 0, 0, 0) : new Vector4(0, 0, 1, 0);
+        float padMult2 = isIn ? arrow.localPosition.x + halfScreen : halfScreen - arrow.localPosition.x;
+        paddingSize2 *= padMult2;
+        mask.padding = paddingSize2;
+
         isRunning = false;
-        //if (isIn) SetActiveChildren(false);
+        if (isIn) SetActiveChildren(false);
     }
     private void SetActiveChildren(bool active)
     {

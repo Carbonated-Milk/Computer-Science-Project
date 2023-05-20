@@ -12,6 +12,11 @@ public static class GameManager
         loaded = true;
     }
 
+    public static void ResetSave()
+    {
+        SaveData.current.ResetSave();
+    }
+
     public static bool OpenScene(int level)
     {
         if (level > SaveData.current.levelsUnlocked) return false;
@@ -28,8 +33,6 @@ public static class GameManager
 
         return true;
     }
-
-    
 
     public static bool NextLevel()
     {

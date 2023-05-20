@@ -26,19 +26,49 @@ public class Play : MonoBehaviour
     }
     public void MaskOut()
     {
-        bar.DOMoveX(8000, 2).SetEase(Ease.InCubic);
         StartCoroutine(MoveMask());
     }
 
+    public void MaskBack()
+    {
+        if (running) { return; }
+        running = true;
+
+        gameObject.SetActive(true);
+        StartCoroutine(MoveMaskBack());
+    }
+
+    private float transitionTime = 1;
+    private bool running = false;
     private IEnumerator MoveMask()
     {
+        if (running) { yield break; }
+        running = true;
+
+        bar.DOMoveX(Screen.width + bar.rect.width * 2, transitionTime).SetEase(Ease.InCubic);
+
         float time = Time.time;
-        while (Time.time - time < 2)
+        while (Time.time - time < transitionTime)
         {
             mask.padding = new Vector4(bar.position.x, 0,0,0);
             yield return null;
         }
         gameObject.SetActive(false);
+        running = false;
+    }
+
+    private IEnumerator MoveMaskBack()
+    {
+        bar.DOMoveX(0, transitionTime).SetEase(Ease.OutCubic);
+
+        float time = Time.time;
+        while (Time.time - time < transitionTime)
+        {
+            mask.padding = new Vector4(bar.position.x, 0, 0, 0);
+            yield return null;
+        }
+
+        running = false;
     }
 
     public void QuickDisable()
