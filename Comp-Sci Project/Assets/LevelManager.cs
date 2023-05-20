@@ -40,6 +40,10 @@ public class LevelManager : MonoBehaviour
     void Update()
     {
         UpdateUI();
+        if(InputP.inputs.r && gameState == GameState.Playing)
+        {
+            Reset();
+        }
     }
 
     private float remainingTime;
@@ -109,9 +113,7 @@ public class LevelManager : MonoBehaviour
     {
         AudioManager.singleton.StopAllSongs();
 
-        SwitchUI(gameUI);
-
-        Scene scene = SceneManager.GetActiveScene(); SceneManager.LoadScene(scene.name);
+        GameManager.OpenScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public static void SetMouseFree(bool isFree)

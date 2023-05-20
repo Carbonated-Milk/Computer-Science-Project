@@ -23,9 +23,13 @@ public static class GameManager
         }
 
         AudioManager.singleton.StopAllSongs();
-        SceneManager.LoadScene(level);
+
+        StaticTransition.TransitionToScene(level);
+
         return true;
     }
+
+    
 
     public static bool NextLevel()
     {

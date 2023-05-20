@@ -24,6 +24,9 @@ public class InputP : MonoBehaviour
         inputs.wasd = controls.Player.Movement.ReadValue<Vector2>();
 
         inputs.run = controls.Player.Run.WasPressedThisFrame();
+
+        inputs.r = controls.Player.Restart.WasPressedThisFrame();
+        inputs.rDown = controls.Player.Restart.WasPerformedThisFrame();
     }
 
     private void OnEnable()
@@ -42,8 +45,14 @@ public struct Inputs
 {
     public Vector2 mousePos;
     public Vector2 mouseDelta;
+
     public Vector2 wasd;
+
     public bool space;
     public bool spaceDown;
+
     public bool run;
+
+    public bool r;
+    public bool rDown;
 }
