@@ -22,6 +22,7 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        SaveManager.OnLoad();
         singleton = this;
         Coin.ResetCoins();
         gameState = GameState.Playing;
@@ -63,7 +64,11 @@ public class LevelManager : MonoBehaviour
         gameState = GameState.Win;
         SwitchUI(winUI);
         StopGamePlay();
-        GameManager.UnlockLevel(SceneManager.GetActiveScene().buildIndex + 1);
+
+        int currentLevel = SceneManager.GetActiveScene().buildIndex;
+        GameManager.UnlockLevel(currentLevel + 1);
+
+        Records.singleton.Display(levelTime - remainingTime);
 
         AudioManager.singleton.Play("Win");
     }
