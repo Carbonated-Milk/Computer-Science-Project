@@ -13,11 +13,11 @@ public static class SaveManager
     public static void OnSave()
     {
         SerializationManager.Save(fileName, SaveData.current);
-        Debug.Log("saved");
     }
 
     public static void OnLoad()
     {
-        SaveData.current = (SaveData)SerializationManager.Load(fileName);
+        string filePath = Application.persistentDataPath + "/saves/" + fileName + ".save";
+        SaveData.current = (SaveData)SerializationManager.Load(filePath);
     }
 }

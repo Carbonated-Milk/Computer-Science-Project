@@ -25,7 +25,6 @@ public class LevelManager : MonoBehaviour
         singleton = this;
         Coin.ResetCoins();
         gameState = GameState.Playing;
-        GameManager.UnlockLevel(SceneManager.GetActiveScene().buildIndex);
     }
     void Start()
     {
@@ -33,6 +32,7 @@ public class LevelManager : MonoBehaviour
         Time.timeScale = 1;
         AudioManager.singleton.Play("Speedy");
         SetMouseFree(false);
+        StopAllCoroutines();
         countDown = StartCoroutine(CountDown());
     }
 
@@ -63,6 +63,7 @@ public class LevelManager : MonoBehaviour
         gameState = GameState.Win;
         SwitchUI(winUI);
         StopGamePlay();
+        GameManager.UnlockLevel(SceneManager.GetActiveScene().buildIndex + 1);
 
         AudioManager.singleton.Play("Win");
     }

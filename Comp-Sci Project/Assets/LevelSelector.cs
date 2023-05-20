@@ -13,8 +13,9 @@ public class LevelSelector : MonoBehaviour
 
 
     private ArrayList buttonList;
-    private void Awake()
+    private void Start()
     {
+        AudioManager.singleton.Play("Menu");
         buttonList = new ArrayList();
         GenerateButtons();
     }
@@ -53,11 +54,6 @@ public class LevelSelector : MonoBehaviour
         }
 
         SetActiveButtons(false);
-    }
-
-    private void Start()
-    {
-        AudioManager.singleton.Play("Menu");
     }
     public void LevelSelected(int level)
     {

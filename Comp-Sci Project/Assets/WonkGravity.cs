@@ -5,6 +5,7 @@ using UnityEngine;
 public class WonkGravity : MonoBehaviour
 {
     private Rigidbody rb;
+    public float adjustSpeed = 15;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -20,7 +21,7 @@ public class WonkGravity : MonoBehaviour
         if (hit.collider != null && hit.collider.CompareTag("GravityChanger"))
         {
             var rotAmount = Quaternion.FromToRotation(transform.up, hit.normal);
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotAmount * transform.rotation, .1f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, rotAmount * transform.rotation, adjustSpeed * Time.deltaTime);
 
 
             var gravChange = Quaternion.FromToRotation(Physics.gravity.normalized, -transform.up);
