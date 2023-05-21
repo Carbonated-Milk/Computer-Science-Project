@@ -73,6 +73,7 @@ public class Play : MonoBehaviour
 
     public void QuickDisable()
     {
+        bar.DOMoveX(Screen.width + bar.rect.width * 2, 0);
         gameObject.SetActive(false);
     }
 }
