@@ -120,6 +120,8 @@ public class Player : MonoBehaviour
     private float lastTimeJumped;
     public void HandleJumping()
     {
+        if (isSliding) return;
+
         if (InputP.inputs.spaceDown)
         {
             if(grounded || Time.time - lastTimeGrounded < cayoteTime && Time.time - lastTimeJumped > cayoteTime) Jump();
@@ -144,32 +146,27 @@ public class Player : MonoBehaviour
     }
 
     [Header("Sliding")]
+    public float slideDecell = .98f;
     private bool isSliding;
     public Vector3 slideSpeed;
-    public float slideDecell = .98f;
-    private bool isCrouching;
 
     public void Sliding()
     {
-        isCrouching = false;
-        isSliding = false;
-        if (InputP.inputs.control && grounded && rb.velocity.sqrMagnitude > 0)
+        if (InputP.inputs.control && grounded)
         {
             isSliding = true;
             col.height = playerHeight * .3f;
             slideSpeed = rb.velocity * slideDecell;
-            Debug.Log("Slide");
+            Debug.Log(Time.time);
         }
-        else if (InputP.inputs.control)
+        else if (InputP.inputs.control && isSliding)
         {
-            isCrouching = true;
-            col.height = playerHeight * .5f;
-            Debug.Log("Crouch");
+            col.height = playerHeight * .3f;
         }
-        else if (!isCrouching) 
-        { 
+        else 
+        {
+            isSliding = false;
             col.height = playerHeight;
-            Debug.Log("stand");
         }
 
     }

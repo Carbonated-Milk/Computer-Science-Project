@@ -25,7 +25,7 @@ public class InputP : MonoBehaviour
 
         inputs.run = controls.Player.Run.WasPressedThisFrame();
 
-        inputs.control = controls.Player.Crouch.WasPerformedThisFrame();
+        inputs.control = controls.Player.Crouch.IsPressed();
         inputs.controlThisFrame = controls.Player.Crouch.WasPressedThisFrame();
 
         inputs.r = controls.Player.Restart.WasPerformedThisFrame();
