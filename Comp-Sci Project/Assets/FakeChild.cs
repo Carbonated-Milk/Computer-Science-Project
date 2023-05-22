@@ -8,7 +8,7 @@ public class FakeChild : MonoBehaviour
     private Quaternion lastRot;
 
     private Vector3 childLastPos;
-    private void Update()
+    private void LateUpdate()
     {
         if (fakeParent == null)
             return;
@@ -33,16 +33,6 @@ public class FakeChild : MonoBehaviour
 
         lastRot = fakeParent.rotation;
         lastPos = fakeParent.position;
-
-        //changes gravity
-        if (fakeParent.CompareTag("GravityChanger"))
-        {
-            RaycastHit hit;
-            Physics.Raycast(transform.position, -transform.up, out hit);
-            var rotAmount = Quaternion.FromToRotation(transform.up, hit.normal);
-            transform.rotation = rotAmount * transform.rotation;
-            Physics.gravity = -transform.up * Physics.gravity.magnitude;
-        }
     }
 
     public void SetFakeParent(Transform parent)

@@ -1,16 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PauseOptions : MonoBehaviour
 {
+    [Header("Settings")]
     public float maxVolume = 2;
     public float maxSensitivity = 2;
+
+    [Header("Sliders")]
+    public Slider volume;
+    public Slider sensitivity;
 
     private GameObject pauseCanvas;
     void Start()
     {
         pauseCanvas = transform.GetChild(0).gameObject;
+        volume.value = SaveData.current.masterVolume;
+        sensitivity.value = SaveData.current.sensitivity;
     }
 
     private bool isOpen = false;
@@ -28,11 +36,15 @@ public class PauseOptions : MonoBehaviour
     public void SetVolume(float amount)
     {
         AudioManager.ChangeMasterVolume(amount * maxVolume);
+        SaveData.current.masterVolume = amount;
+        SaveManager.OnSave();
     }
 
     public void SetSensitivity(float amount)
     {
         Player.sensitivity = amount * maxSensitivity;
+        SaveData.current.sensitivity = amount;
+        SaveManager.OnSave();
     }
 
     public void OpenPauseMenu()

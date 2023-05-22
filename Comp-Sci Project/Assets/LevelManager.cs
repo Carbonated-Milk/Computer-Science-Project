@@ -22,6 +22,7 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        SaveManager.OnLoad();
         singleton = this;
         Coin.ResetCoins();
         gameState = GameState.Playing;
@@ -32,12 +33,17 @@ public class LevelManager : MonoBehaviour
         Time.timeScale = 1;
         AudioManager.singleton.Play("Speedy");
         SetMouseFree(false);
+        StopAllCoroutines();
         countDown = StartCoroutine(CountDown());
     }
 
     void Update()
     {
         UpdateUI();
+        if(InputP.inputs.r && gameState == GameState.Playing)
+        {
+            Reset();
+        }
     }
 
     private float remainingTime;
@@ -60,9 +66,13 @@ public class LevelManager : MonoBehaviour
     {
         if (gameState != GameState.Playing) return;
         gameState = GameState.Win;
-        gameUI.SetActive(false);
-        win.SetActive(true);
+        SwitchUI(winUI);
         StopGamePlay();
+
+        int currentLevel = SceneManager.GetActiveScene().buildIndex;
+        GameManager.UnlockLevel(currentLevel + 1);
+
+        Records.singleton.Display(levelTime - remainingTime);
 
         AudioManager.singleton.Play("Win");
     }
@@ -76,8 +86,7 @@ public class LevelManager : MonoBehaviour
         AudioManager.singleton.Play("PianoSlam");
         timeText.text = remainingTime > 0 ? "Game Over" : "Time's Up";
 
-        gameUI.SetActive(false);
-        death.SetActive(true);
+        SwitchUI(death);
     }
 
     private void StopGamePlay()
@@ -98,16 +107,13 @@ public class LevelManager : MonoBehaviour
 
     [Header("UI Windows")]
     public GameObject gameUI;
-    public GameObject win;
+    public GameObject winUI;
     public GameObject death;
     public void Reset()
     {
         AudioManager.singleton.StopAllSongs();
 
-        gameUI.SetActive(true);
-        death.SetActive(false);
-
-        Scene scene = SceneManager.GetActiveScene(); SceneManager.LoadScene(scene.name);
+        GameManager.OpenScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public static void SetMouseFree(bool isFree)
@@ -122,6 +128,15 @@ public class LevelManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
+    }
+
+    public void SwitchUI(GameObject UI)
+    {
+        winUI.SetActive(false); 
+        gameUI.SetActive(false);
+        death.SetActive(false);
+
+        UI.SetActive(true);
     }
 
     public void NextLevel()

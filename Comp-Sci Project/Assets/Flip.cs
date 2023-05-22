@@ -4,28 +4,25 @@ using UnityEngine;
 
 public class Flip : MonoBehaviour
 {
-    private float waitTime = 1f;
-    private float amount = 90;
-    private float timeToRot = 2f;
+    public float waitTime = 1f;
+    public float amount = 90;
+    public float timeToRot = 2f;
+
+    public float timeOffset = 0;
     void Start()
     {
         StartCoroutine(FlipTransform());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private IEnumerator FlipTransform()
     {
+        yield return new WaitForSeconds(timeOffset);
         while (true)
         {
             float time = Time.time;
             while (Time.time - time < timeToRot)
             {
-                transform.rotation *= Quaternion.Euler(amount / timeToRot * transform.right * Time.deltaTime);
+                transform.rotation *= Quaternion.Euler(amount / timeToRot * transform.forward * Time.deltaTime);
                 yield return null;
             }
 

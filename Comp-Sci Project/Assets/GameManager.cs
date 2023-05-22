@@ -5,11 +5,21 @@ using UnityEngine.SceneManagement;
 
 public static class GameManager
 {
-    private static int levelsUnlocked = 100000;
+    public static bool loaded = false;
+    public static void OpenSave()
+    {
+        SaveManager.OnLoad();
+        loaded = true;
+    }
+
+    public static void ResetSave()
+    {
+        SaveData.current.ResetSave();
+    }
 
     public static bool OpenScene(int level)
     {
-        if (level > levelsUnlocked) return false;
+        if (level > SaveData.current.levelsUnlocked) return false;
 
         if (level >= SceneManager.sceneCountInBuildSettings)
         {
@@ -18,7 +28,9 @@ public static class GameManager
         }
 
         AudioManager.singleton.StopAllSongs();
-        SceneManager.LoadScene(level);
+
+        StaticTransition.TransitionToScene(level);
+
         return true;
     }
 
@@ -31,11 +43,13 @@ public static class GameManager
 
     public static void ReturnToLevelMenu()
     {
+        loaded = true;
         OpenScene(0);
     }
 
-    private static void UnlockLevel(int level)
+    public static void UnlockLevel(int level)
     {
-        levelsUnlocked = Mathf.Max(levelsUnlocked, level);
+        SaveData.current.levelsUnlocked = Mathf.Max(SaveData.current.levelsUnlocked, level);
+        SaveManager.OnSave();
     }
 }
