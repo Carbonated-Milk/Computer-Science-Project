@@ -17,7 +17,8 @@ public class LevelManager : MonoBehaviour
         Playing,
         Paused,
         Win,
-        Lose
+        Lose,
+        Restarting
     }
 
     private void Awake()
@@ -35,14 +36,18 @@ public class LevelManager : MonoBehaviour
         SetMouseFree(false);
         StopAllCoroutines();
         countDown = StartCoroutine(CountDown());
+        timeLoaded = Time.time;
     }
+
+    private float timeLoaded;
 
     void Update()
     {
         UpdateUI();
-        if(InputP.inputs.r && gameState == GameState.Playing)
+        if(InputP.inputs.rThisFrame && gameState == GameState.Playing && Time.time - timeLoaded > .5f)
         {
             Reset();
+            gameState = GameState.Restarting;
         }
     }
 

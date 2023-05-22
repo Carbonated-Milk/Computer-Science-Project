@@ -27,6 +27,9 @@ public class InputP : MonoBehaviour
 
         inputs.control = controls.Player.Crouch.WasPerformedThisFrame();
         inputs.controlThisFrame = controls.Player.Crouch.WasPressedThisFrame();
+
+        inputs.r = controls.Player.Restart.WasPerformedThisFrame();
+        inputs.rThisFrame = controls.Player.Restart.WasPressedThisFrame();
     }
 
     private void OnEnable()
@@ -51,4 +54,7 @@ public struct Inputs
     public bool run;
     public bool control;
     public bool controlThisFrame;
+
+    public bool r;
+    public bool rThisFrame;
 }
