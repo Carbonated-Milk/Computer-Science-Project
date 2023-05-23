@@ -157,7 +157,6 @@ public class Player : MonoBehaviour
             isSliding = true;
             col.height = playerHeight * .3f;
             slideSpeed = rb.velocity * slideDecell;
-            Debug.Log(Time.time);
         }
         else if (InputP.inputs.control && isSliding)
         {
