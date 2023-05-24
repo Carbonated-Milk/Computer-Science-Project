@@ -14,8 +14,11 @@ public class Play : MonoBehaviour
     public RectMask2D mask;
     private void Awake()
     {
+        Time.timeScale = 1;
         singleton = this;
-        if(GameManager.loaded)
+        running = false;
+
+        if (GameManager.loaded)
         {
             QuickDisable();
             return;
@@ -26,6 +29,10 @@ public class Play : MonoBehaviour
     }
     public void MaskOut()
     {
+        if (running) { return; }
+        running = true;
+
+        StopAllCoroutines();
         StartCoroutine(MoveMask());
     }
 
@@ -35,6 +42,7 @@ public class Play : MonoBehaviour
         running = true;
 
         gameObject.SetActive(true);
+        StopAllCoroutines();
         StartCoroutine(MoveMaskBack());
     }
 
@@ -42,9 +50,7 @@ public class Play : MonoBehaviour
     private bool running = false;
     private IEnumerator MoveMask()
     {
-        if (running) { yield break; }
-        running = true;
-
+        bar.DOKill();
         bar.DOMoveX(Screen.width + bar.rect.width * 2, transitionTime).SetEase(Ease.InCubic);
 
         float time = Time.time;
@@ -59,6 +65,7 @@ public class Play : MonoBehaviour
 
     private IEnumerator MoveMaskBack()
     {
+        bar.DOKill();
         bar.DOMoveX(0, transitionTime).SetEase(Ease.OutCubic);
 
         float time = Time.time;
