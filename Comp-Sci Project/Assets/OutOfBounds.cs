@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class OutOfBounds : MonoBehaviour
 {
+    public float outOfBoundsDist = 200;
     void Update()
     {
-        if (transform.position.sqrMagnitude > 200 * 200)
+        if (transform.position.sqrMagnitude > outOfBoundsDist * outOfBoundsDist)
         {
             PlayerHealth.singleton.Die();
         }
