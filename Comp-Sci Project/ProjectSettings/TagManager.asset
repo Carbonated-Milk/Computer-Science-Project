@@ -6,6 +6,7 @@ TagManager:
   tags:
   - InstantDeath
   - GravityChanger
+  - vine
   layers:
   - Default
   - TransparentFX
