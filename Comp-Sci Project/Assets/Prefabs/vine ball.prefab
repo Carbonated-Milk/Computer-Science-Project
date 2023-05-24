@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 4442169896501130815}
   m_Layer: 0
   m_Name: Ball
-  m_TagString: InstantDeath
+  m_TagString: vine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -390,7 +390,7 @@ GameObject:
   - component: {fileID: 4442169897127320354}
   m_Layer: 0
   m_Name: Joint
-  m_TagString: Untagged
+  m_TagString: vine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
