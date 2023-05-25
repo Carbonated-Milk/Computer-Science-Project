@@ -16,22 +16,24 @@ public class Swinging : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (InputP.inputs.space)
-        {
-            Player.singleton.enabled = true;
-            Player.singleton.GetComponent<Rigidbody>().velocity = (transform.position - lastFrame) / (Time.deltaTime);
-        }
-        else if (vine != null)
-        {
-            Player.singleton.enabled = false;
-            swinging();
-        }
-        lastFrame = transform.position;
+        swinging();
+        
     }
 
     public void swinging()
     {
+        if (vine == null) { return; }
+       
+        Player.singleton.enabled = false;
+        lastFrame = transform.position;
         transform.position = vine.position;
+        if (InputP.inputs.space)
+        {
+            vine = null;
+            Player.singleton.enabled = true;
+            Player.singleton.GetComponent<Rigidbody>().velocity = (transform.position - lastFrame) / (Time.deltaTime);
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -40,7 +42,7 @@ public class Swinging : MonoBehaviour
         {
             if (collision.collider.CompareTag("vine"))
             {
-
+                vine = collision.collider.transform;
             }
         }
     }
