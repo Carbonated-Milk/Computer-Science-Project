@@ -7,17 +7,17 @@ public class Swinging : MonoBehaviour
 
     private Transform vine;
     private Vector3 lastFrame;
+    private Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
         swinging();
-        
     }
 
     public void swinging()
@@ -27,6 +27,7 @@ public class Swinging : MonoBehaviour
         Player.singleton.enabled = false;
         lastFrame = transform.position;
         transform.position = vine.position;
+        Player.singleton.MoveCamera();
         if (InputP.inputs.space)
         {
             vine = null;
