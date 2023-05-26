@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class OutOfBounds : MonoBehaviour
 {
-    public float outOfBoundsDist = 200;
+    private float outOfBoundsDist;
+
+    private void Start()
+    {
+       outOfBoundsDist = Vector3.Distance(FindObjectOfType<WinZone>().transform.position, transform.position) * 2;
+    }
     void Update()
     {
         if (transform.position.sqrMagnitude > outOfBoundsDist * outOfBoundsDist)

@@ -15,6 +15,7 @@ public class Play : MonoBehaviour
     private void Awake()
     {
         Time.timeScale = 1;
+        play.DOScale(1.3f, 1).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
         singleton = this;
         running = false;
 
@@ -25,7 +26,6 @@ public class Play : MonoBehaviour
         }
 
         GameManager.OpenSave();
-        play.DOScale(1.3f, 1).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
     }
     public void MaskOut()
     {

@@ -125,4 +125,9 @@ public class LevelSelector : MonoBehaviour
     {
         Play.singleton.MaskBack();
     }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }
