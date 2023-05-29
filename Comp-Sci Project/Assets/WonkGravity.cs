@@ -21,6 +21,8 @@ public class WonkGravity : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (changing) return;
+
         RaycastHit hit;
         Physics.Raycast(transform.position, -transform.up, out hit, 5f);
 
@@ -44,8 +46,11 @@ public class WonkGravity : MonoBehaviour
         StartCoroutine(ChangeRot());
     }
 
+    private bool changing = false;
     public IEnumerator ChangeRot()
     {
+        changing = true;
+
         float turnTime = .2f;
         float startTime = Time.time;
         var startRot = transform.rotation;
@@ -56,5 +61,7 @@ public class WonkGravity : MonoBehaviour
             yield return null;
         }
         transform.rotation = endRot;
+
+        changing = false;
     }
 }

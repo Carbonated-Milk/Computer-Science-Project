@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Charge
+  m_Name: Evil
   m_Shader: {fileID: -6465566751694194690, guid: e3d55284b7565154081dcc2e261db71f,
     type: 3}
   m_ValidKeywords: []
@@ -49,13 +49,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _Mod: 1
-    - _Mult: 1
-    - _Offset: 1
+    - _Mult: 3.7
+    - _Offset: 3.57
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Speed: 0.01
-    - _Visibility: 1
+    - _Speed: 2.12
+    - _Visibility: 100
     m_Colors:
-    - _Color1: {r: 0, g: 0.36470586, b: 1, a: 1}
-    - _Color2: {r: 0, g: 0.9882354, b: 1, a: 1}
+    - _Color1: {r: 1, g: 0.9606118, b: 0, a: 1}
+    - _Color2: {r: 1, g: 0, b: 0.05047798, a: 1}
   m_BuildTextureStacks: []
