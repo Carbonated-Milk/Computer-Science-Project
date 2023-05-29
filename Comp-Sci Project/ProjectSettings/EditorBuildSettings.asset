@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level 6.unity
     guid: d9ecc2aaad1e7764588220b3cf43905e
+  - enabled: 1
+    path: Assets/Scenes/VineIsland.unity
+    guid: d2b70bad02b0f364592abd7328a251f8
   m_configObjects: {}

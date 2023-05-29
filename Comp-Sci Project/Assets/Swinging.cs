@@ -25,25 +25,26 @@ public class Swinging : MonoBehaviour
         if (vine == null) { return; }
        
         Player.singleton.enabled = false;
-        lastFrame = transform.position;
+        lastFrame = vine.position;
         transform.position = vine.position;
         Player.singleton.MoveCamera();
         if (InputP.inputs.space)
         {
+            Player.singleton.GetComponent<Rigidbody>().velocity = (vine.position - lastFrame) / Time.deltaTime + transform.up * Player.singleton.jumpPower;
             vine = null;
             Player.singleton.enabled = true;
-            Player.singleton.GetComponent<Rigidbody>().velocity = (transform.position - lastFrame) / (Time.deltaTime);
         }
 
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collider)
     {
-        if (collision.collider != null)
+        if (collider.gameObject != null)
         {
-            if (collision.collider.CompareTag("vine"))
+            if (collider.CompareTag("vine"))
             {
-                vine = collision.collider.transform;
+                vine = collider.transform;
+                vine.GetComponent<Rigidbody>().AddForce(rb.velocity * 1.5f, ForceMode.VelocityChange);
             }
         }
     }

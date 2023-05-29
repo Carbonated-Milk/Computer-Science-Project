@@ -67,8 +67,6 @@ public class Player : MonoBehaviour
     {
         if (isSliding) { return; };
 
-
-
         float controltiplier = 1;
         if (!grounded) controltiplier /= 4;
 
@@ -77,7 +75,10 @@ public class Player : MonoBehaviour
         Vector3 targetRB = (InputP.inputs.wasd.x * transform.right + InputP.inputs.wasd.y * transform.forward).normalized;
         targetRB *= _maxSpeed;
 
-        Vector3 relVel = targetRB - (rb.velocity - Vector3.Dot(rb.velocity, transform.up) * transform.up);
+        var flatVelocity = (rb.velocity - Vector3.Dot(rb.velocity, transform.up) * transform.up);
+        Vector3 relVel = targetRB - flatVelocity;
+
+        if (Vector3.Dot(targetRB, flatVelocity) > 0 && !grounded && Vector3.Dot(targetRB, relVel) < 0) return;
 
         rb.AddForce(relVel * controltiplier * speedCorrector, ForceMode.Acceleration);
     }

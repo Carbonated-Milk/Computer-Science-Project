@@ -75,6 +75,13 @@ MonoBehaviour:
       pitch: 1
       loop: 0
       source: {fileID: 0}
+    - name: GravitySwitch
+      clip: {fileID: 8300000, guid: cccbcdabd7104e6408fd7b6df71f83fb, type: 3}
+      volume: 1
+      adjustedVolume: 0
+      pitch: 1
+      loop: 0
+      source: {fileID: 0}
   - name: Songs
     sounds:
     - name: Speedy
