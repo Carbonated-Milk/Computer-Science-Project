@@ -30,7 +30,8 @@ public class Swinging : MonoBehaviour
         Player.singleton.MoveCamera();
         if (InputP.inputs.space)
         {
-            Player.singleton.GetComponent<Rigidbody>().velocity = (vine.position - lastFrame) / Time.deltaTime + transform.up * Player.singleton.jumpPower;
+            rb.velocity = Vector3.zero;
+            rb.velocity = (vine.position - lastFrame) / Time.deltaTime + transform.up * Player.singleton.jumpPower;
             vine = null;
             Player.singleton.enabled = true;
         }
